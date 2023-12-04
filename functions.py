@@ -17,6 +17,7 @@ def variables_definition():
     pass
     
 def BaseValueMetric(ValueMetric_m, UnitMetric_m):
+    
     match UnitMetric_m:
         case "mm":
             valueMETER = ValueMetric_m / 1000
@@ -31,59 +32,59 @@ def BaseValueMetric(ValueMetric_m, UnitMetric_m):
     return valueMETER
 
 
-def BaseValueImperial(Unit_Imperial_mi, ValueImperial_mi):
-    match Unit_Imperial_mi:
+def BaseValueImperial(UnitImperial_mi, ValueImperial_mi):
+    match UnitImperial_mi:
         case "in":
-            valueMILE = ValueImperial_mi * 63360
+            valueMILE = ValueImperial_mi / 63360
         case "ft":
-            valueMILE = ValueImperial_mi * 5.280
+            valueMILE = ValueImperial_mi / 5280
         case "yd":
-            valueMILE = ValueImperial_mi * 1.760
+            valueMILE = ValueImperial_mi / 1760
         case "fur":
-            valueMILE = ValueImperial_mi * 5.280
+            valueMILE = ValueImperial_mi / 5280
         case "mi":
             valueMILE = ValueImperial_mi
     
     return valueMILE
 
-def UnitMetricConversion(future_Unit_Metric_mic, future_Unit_Metric_mic_value):  
+def UnitMetricConversion(valueConvMetric, unitConvMetric):  
 
-    match future_Unit_Metric_mic_value:
+    match unitConvMetric:
         case "mm":
-            future_Unit_Metric_mic = future_Unit_Metric_mic / 1000
+            valueMet = valueConvMetric * 1000
         case "cm":
-            future_Unit_Metric_mic = future_Unit_Metric_mic / 100
+            valueMet = valueConvMetric * 100
         case "dm":
-            future_Unit_Metric_mic = future_Unit_Metric_mic / 10
+            valueMet = valueConvMetric * 10
         case "m":
-            future_Unit_Metric_mic = future_Unit_Metric_mic
+            pass
         case "km":
-            future_Unit_Metric_micr = future_Unit_Metric_mic * 1000 
+            valueMet = valueConvMetric / 1000 
 
-    return future_Unit_Metric_mic_value
+    return valueMet
     
-def UnitImperialConversion(future_imperial, future_imperial_value):
+def UnitImperialConversion(valueConvImperial, unitConvImperial):    
      
-    match future_imperial:
+    match unitConvImperial:
         case "in":
-            future_imperial_value = future_imperial_value / 63360
+            valueImp = valueConvImperial * 63360
         case "ft":
-            future_imperial_value = future_imperial_value / 5280
+            valueImp = valueConvImperial * 5280
         case "yd":
-            future_imperial_value = future_imperial_value / 1760
+            valueImp = valueConvImperial * 1760
         case "fur":
-            future_imperial_value = future_imperial_value / 0.000189393939
+            valueImp = valueConvImperial * 0.000189393939
         case "mi":
-            future_imperial_value = future_imperial_value
+            valueImp = valueConvImperial
 
-    return future_imperial_value
+    return valueImp
 
 def InImperial_OutMetric(in_imperial):
-    out_Unit_Metric_mic = in_imperial * 0.000621371
-    return out_Unit_Metric_mic
+    out_metric = in_imperial / 0.000621371
+    return out_metric
 
-def InMetric_OutImperial(in_Unit_Metric_mic):
-    out_imperial = in_Unit_Metric_mic / 1609.344
+def InMetric_OutImperial(in_metric):
+    out_imperial = in_metric / 1609.344
     return out_imperial
 
 ###########################################################
@@ -125,39 +126,47 @@ try_except()
 
 def system_determining(Value_in, Unit_in, Unit_out):
     
-    if Unit_in == "mm" or "cm" or "m" or "dm" or "km":
+
+    if Unit_in in ["mm", "cm", "m", "dm", "km"]:
         system_in = "metric"
         valueMID = BaseValueMetric(ValueMetric_m = Value_in, UnitMetric_m = Unit_in)
-    elif Unit_in == "in" or "ft" or "yd" or "mi":
+        
+    elif Unit_in in ["in", "ft", "yd", "mi"]:
         system_in = "imperial"
         valueMID = BaseValueImperial(ValueImperial_mi = Value_in, UnitImperial_mi = Unit_in)
         
-    if Unit_out == "mm" or "cm" or "m" or "km":
+    if Unit_out in ["mm", "cm", "m", "dm", "km"]:
         system_out = "metric"
-    elif Unit_out == "in" or "ft" or "yd" or "mi":
+
+    elif Unit_out in ["in", "ft", "yd", "mi"]:
         system_out = "imperial"
 
     return valueMID, system_in, system_out
 
-def converter_strategy(system_in, system_out):
-    if system_in == system_out == "metric":
-        valueOUT = UnitMetricConversion(future_Unit_Metric_mic = value_m, future_Unit_Metric_mic_value= unitOUT)
+def converter_strategy(Value_in, Unit_out, system_in, system_out):
+    if system_in == "metric" and system_out == "metric":
+        valueOUT = UnitMetricConversion(valueConvMetric = Value_in, unitConvMetric = Unit_out)
 
-    elif system_in == system_out == "imperial":
-        valueOUT = UnitImperialConversion(future_imperial_value = valueOUT, future_imperial = unitOUT)
+    elif system_in == "imperial" and system_out == "imperial":
+        valueOUT = UnitImperialConversion(valueConvImperial = Value_in, unitConvImperial = Unit_out)
     
     elif system_in == "metric" and system_out == "imperial":
-        pass
+        valueALMOST = InMetric_OutImperial(in_metric = Value_in)
+        valueOUT = UnitImperialConversion(valueConvImperial = valueALMOST, unitConvImperial = Unit_out)
 
     elif system_in == "imperial" and system_out == "metric":
-        pass
+        valueALMOST = InImperial_OutMetric(in_imperial = Value_in)
+        valueOUT = UnitMetricConversion(valueConvMetric = valueALMOST, unitConvMetric = Unit_out)
 
     return valueOUT
 
+
 valueMID, systemIN, systemOUT = system_determining(Value_in = valueIN, Unit_in = unitIN, Unit_out = unitOUT)
-valueFINAL = converter_strategy(system_in = systemIN, system_out = systemOUT)
+print(systemIN, systemOUT)
+valueFINAL = converter_strategy(Value_in = valueMID, Unit_out = unitOUT, system_in = systemIN, system_out = systemOUT)
+
+print(valueFINAL, unitOUT)
 
 ###########################################################
 #####                            output_area
 
-print(valueFINAL, unitOUT)
