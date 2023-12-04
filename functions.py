@@ -91,7 +91,7 @@ def InMetric_OutImperial(in_metric):
 #####                            input_area
 
 def data_gathering():
-    com = "Podaj długość wraz z jednostką w formacie \n metrycznym:\n mm, cm, m, km:\n lub imperialnym:\n in, ft, yd, fur, mi \n >>"
+    com = "Podaj długość wraz z jednostką w formacie \n metrycznym:\n mm, cm, dm, m, km:\n lub imperialnym:\n in, ft, yd, fur, mi \n >>"
     x = input(com)
     x = x.split(" ")
     return x
@@ -165,8 +165,8 @@ valueMID, systemIN, systemOUT = system_determining(Value_in = valueIN, Unit_in =
 print(systemIN, systemOUT)
 valueFINAL = converter_strategy(Value_in = valueMID, Unit_out = unitOUT, system_in = systemIN, system_out = systemOUT)
 
-print(valueFINAL, unitOUT)
 
 ###########################################################
 #####                            output_area
 
+print(valueFINAL, unitOUT)
