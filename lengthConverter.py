@@ -31,7 +31,6 @@ def BaseValueMetric(ValueMetric_m, UnitMetric_m):
             valueMETER = ValueMetric_m * 1000 
     return valueMETER
 
-
 def BaseValueImperial(UnitImperial_mi, ValueImperial_mi):
     match UnitImperial_mi:
         case "in":
@@ -91,30 +90,36 @@ def InMetric_OutImperial(in_metric):
 #####                            input_area
 
 def data_gathering():
-    com = "Podaj długość wraz z jednostką w formacie \n metrycznym:\n mm, cm, dm, m, km:\n lub imperialnym:\n in, ft, yd, fur, mi \n >>"
-    x = input(com)
+
+    import sys
+
+    x = input("Podaj długość wraz z jednostką w formacie \n metrycznym:\n mm, cm, dm, m, km:\n lub imperialnym:\n in, ft, yd, fur, mi \n >>")
     x = x.split(" ")
-    return x
+    units = ["mm", "cm", "m", "dm", "km", "in", "ft", "yd", "mi"]
     
-def inputdata(x):
     Value_in = x[0]
-    Value_in = float(Value_in)
+    try:
+        Value_in = float(Value_in)
+    except ValueError:
+        print("Zła wartość. Podana wartość nie jest liczbą.")
+        sys.exit("Program zakończony z powodu błędu.")
+
+
     Unit_in = x[1]
+    if Unit_in not in units: 
+        print("Zła jednostka")
+        sys.exit("Program zakończony z powodu błędu.")
+
+
     Unit_out = input("Na co zamienić tą długość?\n Format metryczny??:\n mm, cm, m, km:\n Format imperialny??:\n in, ft, yd, fur, mi \n >>")
-    return Value_in, Unit_in, Unit_out
+    if Unit_out not in units: 
+        print("Zła jednostka")
+        sys.exit("Program zakończony z powodu błędu.")
+
+    return Value_in, Unit_in, Unit_out  
     
-def datacleaning():
-    #CREATE DATA CLEANING
-    pass
 
-def try_except():
-    #CREATE TRY EXCEPTS
-    pass
-
-clientANS = data_gathering()
-valueIN, unitIN, unitOUT = inputdata(x = clientANS)
-datacleaning()
-try_except()
+valueIN, unitIN, unitOUT = data_gathering()
 
 #OUT: valueIN, unitIN, unitOUT
 
