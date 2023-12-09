@@ -90,33 +90,27 @@ def InMetric_OutImperial(in_metric):
 #####                            input_area
 
 def data_gathering():
-
-    import sys
-
-    x = input("Podaj długość wraz z jednostką w formacie \n metrycznym:\n mm, cm, dm, m, km:\n lub imperialnym:\n in, ft, yd, fur, mi \n >>")
-    x = x.split(" ")
     units = ["mm", "cm", "m", "dm", "km", "in", "ft", "yd", "mi"]
     
-    Value_in = x[0]
-    try:
-        Value_in = float(Value_in)
-    except ValueError:
-        print("Zła wartość. Podana wartość nie jest liczbą.")
-        sys.exit("Program zakończony z powodu błędu.")
+    while True:
+        x = input("Podaj długość wraz z jednostką w formacie \n metrycznym:\n mm, cm, dm, m, km:\n lub imperialnym:\n in, ft, yd, fur, mi \n >>")
+        x = x.split(" ")
 
+        if Value_in != float(Value_in):
+            print("Zła wartość")
+            data_gathering()
+        if Unit_in not in units: 
+            print("Zła jednostka na wejściu")
+            data_gathering()
+        if Unit_out not in units: 
+            print("Zła jednostka wyjściowa")
+            data_gathering()
+        else
+            break
 
-    Unit_in = x[1]
-    if Unit_in not in units: 
-        print("Zła jednostka")
-        sys.exit("Program zakończony z powodu błędu.")
-
-
-    Unit_out = input("Na co zamienić tą długość?\n Format metryczny??:\n mm, cm, m, km:\n Format imperialny??:\n in, ft, yd, fur, mi \n >>")
-    if Unit_out not in units: 
-        print("Zła jednostka")
-        sys.exit("Program zakończony z powodu błędu.")
-
-    return Value_in, Unit_in, Unit_out  
+        return Value_in, Unit_in, Unit_out  
+    
+return Value_in, Unit_in, Unit_out  
     
 
 valueIN, unitIN, unitOUT = data_gathering()
